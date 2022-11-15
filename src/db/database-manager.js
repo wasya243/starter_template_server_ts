@@ -1,37 +1,27 @@
 const mongoose = require('mongoose')
 
 class DatabaseManager {
-  db
-  port
-  host
-  dbName
+    uri
 
-  constructor(dbConfig = {}) {
-    mongoose.Promise = global.Promise
-    this.port = dbConfig.PORT
-    this.dbName = dbConfig.NAME
-    this.host = dbConfig.HOST
-  }
-
-  _getConnectionUrl() {
-    return `mongodb://${this.host}:${this.port}/${this.dbName}`
-  }
-
-  async connect() {
-    const url = this._getConnectionUrl()
-    const mongoOptions = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      connectTimeoutMS: 3000,
-      socketTimeoutMS: 3000,
+    constructor(dbConfig = {}) {
+        mongoose.Promise = global.Promise
+        this.uri = dbConfig.URI
     }
 
-    this.db = await mongoose.connect(url, mongoOptions)
+    async connect() {
+        const mongoOptions = {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            connectTimeoutMS: 3000,
+            socketTimeoutMS: 3000,
+        }
 
-    console.log(`Database connection established`)
+        this.db = await mongoose.connect(this.uri, mongoOptions)
 
-    return this.db
-  }
+        console.log(`Database connection established`)
+
+        return this.db
+    }
 }
 
 module.exports = DatabaseManager

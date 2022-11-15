@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 
 const DbManager = require('./db/database-manager')
 const Logger = require('./lib/logger')
@@ -19,6 +20,7 @@ class Server {
     this.logger = new Logger()
     this.dbManager = new DbManager(config.DATABASE)
     this.port = config.SERVER.PORT
+    app.use(cors())
     app.use('/api', this.api.getAPI())
   }
 
