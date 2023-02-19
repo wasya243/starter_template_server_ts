@@ -1,5 +1,6 @@
 const express = require('express');
 
+const validate = require('../../middlewares/validation');
 const TodosHandler = require('../handlers/todos');
 
 class TodosRouter {
@@ -14,9 +15,9 @@ class TodosRouter {
   }
 
   setupRoutes() {
-    this.router.patch('/todos/:id', this.todosHandler.patchTodo);
+    this.router.patch('/todos/:id', validate('patchTodo', 'body'), this.todosHandler.patchTodo);
     this.router.get('/todos/:id', this.todosHandler.getTodos);
-    this.router.post('/todos', this.todosHandler.createTodo);
+    this.router.post('/todos', validate('createTodo', 'body'), this.todosHandler.createTodo);
     this.router.delete('/todos/:id', this.todosHandler.deleteTodo);
   }
 }

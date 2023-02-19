@@ -1,3 +1,5 @@
+const createHttpError = require('http-errors');
+
 const { Todo } = require('../../db/models/todo');
 
 class Todos {
@@ -22,7 +24,7 @@ class Todos {
 
       res.send('saved');
     } catch (err) {
-      next(err);
+      next(createHttpError(500, { message: err.message }));
     }
   }
 
@@ -34,7 +36,7 @@ class Todos {
 
       res.send('deleted');
     } catch (err) {
-      next(err);
+      next(createHttpError(500, { message: err.message }));
     }
   }
 
@@ -47,7 +49,7 @@ class Todos {
 
       res.send('updated');
     } catch (err) {
-      next(err);
+      next(createHttpError(500, { message: err.message }));
     }
   }
 
@@ -59,7 +61,7 @@ class Todos {
 
       res.send(todos);
     } catch (err) {
-      next(err);
+      next(createHttpError(500, { message: err.message }));
     }
   }
 }
