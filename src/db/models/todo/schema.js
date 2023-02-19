@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {Types: mongooseTypes} = mongoose.Schema;
+const { Types: mongooseTypes } = mongoose.Schema;
 
 const todoSchema = new mongoose.Schema({
   user_id: {
