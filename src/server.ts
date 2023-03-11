@@ -1,21 +1,32 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
+import http from 'http'
 
-const DbManager = require('./db/database-manager');
-const Logger = require('./lib/logger');
-const API = require('./api');
-const initJobs = require('./scheduler');
+import { DatabaseManager } from './db/database-manager';
+import { Logger } from './lib/logger';
+import { SERVER_CONFIG } from './config';
+import { initJobs } from './scheduler';
+import { API } from './api';
 
-class Server {
-  constructor(config) {
+export class Server {
+  private readonly dbManager: DatabaseManager;
+  private readonly api: API;
+  private readonly app: express.Express;
+  private readonly logger: Logger
+
+  private server: http.Server | null = null;
+
+  private readonly port: number;
+
+  constructor(config: SERVER_CONFIG) {
     const app = express();
     this.api = new API();
     this.app = app;
     this.logger = new Logger();
-    this.dbManager = new DbManager(config.DATABASE);
+    this.dbManager = new DatabaseManager(config.DATABASE.URI);
     this.port = config.SERVER.PORT;
     app.use(cors());
-    app.use('/api', this.api.getAPI());
+    app.use(this.api.getAPI());
   }
 
   listen() {
@@ -31,5 +42,3 @@ class Server {
     this.listen();
   }
 }
-
-module.exports = Server;

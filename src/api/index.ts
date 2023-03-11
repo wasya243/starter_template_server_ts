@@ -1,55 +1,56 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const { STATUS_CODES } = require('http');
+import express from 'express';
+import bodyParser from 'body-parser';
+import { STATUS_CODES } from 'http';
 
-const Todos = require('./routes/todos');
+import { TodosRouter as Todos } from './routes/todos';
 
-class API {
-  constructor() {
-    this.router = express.Router();
-    this.todos = new Todos();
-    this.setUpAPI();
-  }
+export class API {
+    private readonly router: express.Router;
+    private readonly todos: Todos;
+    constructor() {
+        this.router = express.Router();
+        this.todos = new Todos();
+        this.setUpAPI();
+    }
 
-  getAPI() {
-    return this.router;
-  }
+    getAPI(): express.Router {
+        return this.router;
+    }
 
-  _logRequest(req, res, next) {
-    const requestData = {
-      url: req.url,
-      date: new Date().toISOString(),
-      method: req.method
-    };
+    private logRequest(req: express.Request, res: express.Response, next: express.NextFunction): void {
+        const requestData = {
+            url: req.url,
+            date: new Date().toISOString(),
+            method: req.method
+        };
 
-    console.log('Request made:', {
-      ...requestData
-    });
+        console.log('Request made:', {
+            ...requestData
+        });
 
-    next();
-  }
+        next();
+    }
 
-  _handleError(error, req, res, next) {
-    const { status = 500 } = error;
+    _handleError(error: any, req: express.Request, res: express.Response, next: express.NextFunction): void {
+        const {status = 500} = error;
 
-    console.error('Error occurred:', error);
+        console.error('Error occurred:', error);
 
-    const response = {
-      status,
-      message: status === 500 ? STATUS_CODES[status] : error.message || STATUS_CODES[status]
-    };
+        const response = {
+            status,
+            message: status === 500 ? STATUS_CODES[status] : error.message || STATUS_CODES[status]
+        };
 
-    res.status(response.status).send(response);
+        res.status(response.status).send(response);
 
-    next();
-  }
+        next();
+    }
 
-  setUpAPI() {
-    this.router.use(bodyParser.json({ type: 'application/json' }));
-    this.router.use(this._logRequest);
-    this.router.use(this.todos.getRouter());
-    this.router.use(this._handleError);
-  }
+    setUpAPI() {
+        this.router.use(bodyParser.json());
+        this.router.use(bodyParser.urlencoded({ extended: true }))
+        this.router.use(this.logRequest);
+        this.router.use('/api', this.todos.getRouter());
+        this.router.use(this._handleError);
+    }
 }
-
-module.exports = API;

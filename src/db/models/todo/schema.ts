@@ -1,7 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
+import { ITodo } from '../../../types';
+
 const { Types: mongooseTypes } = mongoose.Schema;
 
-const todoSchema = new mongoose.Schema({
+export const todoSchema = new mongoose.Schema<ITodo>({
   user_id: {
     type: mongooseTypes.String,
     required: true
@@ -23,7 +26,3 @@ const todoSchema = new mongoose.Schema({
     default: Date.now()
   }
 });
-
-module.exports = {
-  todoSchema
-};

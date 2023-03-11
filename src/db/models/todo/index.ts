@@ -1,9 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const { todoSchema } = require('./schema');
+import { ITodo } from '../../../types';
+import { todoSchema } from './schema';
 
-const Todo = mongoose.model('Todo', todoSchema, 'todos');
-
-module.exports = {
-  Todo
-};
+export const Todo = mongoose.model<ITodo>('Todo', todoSchema, 'todos');

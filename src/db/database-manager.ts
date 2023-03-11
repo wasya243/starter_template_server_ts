@@ -1,17 +1,19 @@
-const mongoose = require('mongoose');
+import * as mongoose from 'mongoose';
 
-class DatabaseManager {
-  constructor(dbConfig = {}) {
-    mongoose.Promise = global.Promise;
-    this.uri = dbConfig.URI;
+export class DatabaseManager {
+  private readonly uri: string;
+  private db: mongoose.Mongoose | null = null;
+
+  constructor(uri: string) {
+    this.uri = uri;
   }
 
-  async connect() {
+  async connect(): Promise<mongoose.Mongoose> {
     const mongoOptions = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       connectTimeoutMS: 3000,
-      socketTimeoutMS: 3000
+      socketTimeoutMS: 3000,
     };
 
     this.db = await mongoose.connect(this.uri, mongoOptions);
@@ -21,5 +23,3 @@ class DatabaseManager {
     return this.db;
   }
 }
-
-module.exports = DatabaseManager;

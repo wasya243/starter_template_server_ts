@@ -1,17 +1,19 @@
-const createHttpError = require('http-errors');
+import createHttpError from 'http-errors';
+import express from 'express';
+import _ from 'lodash';
 
-const validators = require('../validators');
+import Validators from '../validators';
 
-function validate(validator, toValidate) {
+function validate(validator: string, toValidate: string) {
   if (!validator) {
     throw new Error(`'${validator}' validator is not exist`);
   }
 
-  return async function (req, res, next) {
+  return async function (req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      req.body = await validators[validator].validateAsync(req[toValidate]);
+      req.body = await Validators[validator].validateAsync(_.get(req as any, toValidate));
       next();
-    } catch (err) {
+    } catch (err: any) {
       if (err.isJoi) {
         return next(createHttpError(422, { message: err.message }));
       }

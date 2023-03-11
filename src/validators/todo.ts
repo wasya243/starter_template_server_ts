@@ -1,4 +1,4 @@
-const joi = require('joi');
+import joi from 'joi';
 
 const createTodo = joi.object({
   user_id: joi.string().required(),
@@ -10,7 +10,9 @@ const patchTodo = joi.object({
   is_completed: joi.bool().required()
 });
 
-module.exports = {
+const TodoValidators = {
   createTodo,
   patchTodo
 };
+
+export default TodoValidators;
