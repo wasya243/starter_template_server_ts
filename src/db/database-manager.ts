@@ -1,11 +1,11 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from 'mongoose'
 
 export class DatabaseManager {
-  private readonly uri: string;
-  private db: mongoose.Mongoose | null = null;
+  private readonly uri: string
+  private db: mongoose.Mongoose | null = null
 
   constructor(uri: string) {
-    this.uri = uri;
+    this.uri = uri
   }
 
   async connect(): Promise<mongoose.Mongoose> {
@@ -14,12 +14,12 @@ export class DatabaseManager {
       useUnifiedTopology: true,
       connectTimeoutMS: 3000,
       socketTimeoutMS: 3000,
-    };
+    }
 
-    this.db = await mongoose.connect(this.uri, mongoOptions);
+    this.db = await mongoose.connect(this.uri, mongoOptions)
 
-    console.log('Database connection established');
+    console.log('Database connection established')
 
-    return this.db;
+    return this.db
   }
 }

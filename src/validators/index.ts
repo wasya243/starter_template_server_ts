@@ -1,9 +1,9 @@
-import joi from 'joi';
+import joi from 'joi'
 
-import TodoValidators from './todo';
+import TodoValidators from './todo'
 
 const Validators: { [key: string]: joi.ObjectSchema } = {
-    ...TodoValidators
+  ...TodoValidators,
 }
 
 export default Validators

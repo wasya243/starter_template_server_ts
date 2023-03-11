@@ -1,7 +1,7 @@
-const schedule = require('node-schedule-tz');
+import schedule from 'node-schedule'
 
-import { testJob } from "./jobs/test-job";
+import { testJob } from './jobs/test-job'
 
 export const initJobs = () => {
-  schedule.scheduleJob('* * * * *', testJob);
-};
+  schedule.scheduleJob('* * * * *', testJob)
+}
